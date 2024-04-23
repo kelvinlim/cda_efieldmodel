@@ -1,0 +1,56 @@
+================================================================================
+GFCI (Sun, April 21, 2024 04:15:53 PM)
+================================================================================
+
+Runtime Parameters
+--------------------------------------------------------------------------------
+number of threads: 255
+
+Dataset
+--------------------------------------------------------------------------------
+file: tmp0t8avvc4
+header: yes
+delimiter: comma
+quote char: none
+missing marker: none
+comment marker: none
+
+Algorithm Run
+--------------------------------------------------------------------------------
+algorithm: GFCI
+test of independence: Fisher Z Test
+score: Sem BIC Score
+
+Algorithm Parameters
+--------------------------------------------------------------------------------
+addOriginalDataset: no
+alpha: 0.05
+completeRuleSetUsed: no
+depth: -1
+doDiscriminatingPathRule: no
+maxDegree: 1000
+maxPathLength: -1
+numberResampling: 0
+penaltyDiscount: 1.0
+percentResampleSize: 100
+possibleMsepDone: no
+precomputeCovariances: no
+resamplingEnsemble: 1
+resamplingWithReplacement: no
+saveBootstrapGraphs: no
+seed: -1
+semBicRule: 1
+semBicStructurePrior: 0.0
+timeLag: 0
+verbose: no
+
+
+Sun, April 21, 2024 04:15:53 PM: Start data validation on file tmp0t8avvc4.
+Sun, April 21, 2024 04:15:53 PM: End data validation on file tmp0t8avvc4.
+There are 179 cases and 18 variables.
+
+Sun, April 21, 2024 04:15:53 PM: Start reading in file tmp0t8avvc4.
+Sun, April 21, 2024 04:15:53 PM: Finished reading in file tmp0t8avvc4.
+Sun, April 21, 2024 04:15:53 PM: File tmp0t8avvc4 contains 179 cases, 18 variables.
+
+Start search: Sun, April 21, 2024 04:15:53 PM

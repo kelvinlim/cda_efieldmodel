@@ -1,0 +1,65 @@
+        - id
+        - group_f
+        - group
+        - subject
+        - bm_bmi
+        - age
+        - gender
+        - Fp1left
+        - Fp1right
+        - F3left
+        - F3right
+        - thickness_CSF_left
+        - thickness_scalp_left
+        - thickness_skull_left
+        - thickness_cortex_left
+        - ScalpToCortex_left
+        - thickness_CSF_right
+        - thickness_scalp_right
+        - thickness_skull_right
+        - thickness_cortex_right
+        - ScalpToCortex_right
+=============================
+        id
+        group_f
+        group
+        subject
+        bm_bmi
+        age
+        gender
+        Fp1left
+        Fp1right
+        F3left
+        F3right
+        thickness_CSF_left
+        thickness_scalp_left
+        thickness_skull_left
+        thickness_cortex_left
+        ScalpToCortex_left
+        thickness_CSF_right
+        thickness_scalp_right
+        thickness_skull_right
+        thickness_cortex_right
+        ScalpToCortex_right
+============================= with comma 
+        id,
+        group_f,
+        group,
+        subject,
+        bm_bmi,
+        age,
+        gender,
+        Fp1left,
+        Fp1right,
+        F3left,
+        F3right,
+        thickness_CSF_left,
+        thickness_scalp_left,
+        thickness_skull_left,
+        thickness_cortex_left,
+        ScalpToCortex_left,
+        thickness_CSF_right,
+        thickness_scalp_right,
+        thickness_skull_right,
+        thickness_cortex_right,
+        ScalpToCortex_right,

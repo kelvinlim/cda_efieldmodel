@@ -1,0 +1,248 @@
+GLOBAL:
+  version: 4.0
+  name: efield
+
+
+  # name of various directories to create
+  directories:
+    # name of data directory
+    datadir: data_clean
+    rawdatadir: data_raw
+    output: output_gfci
+
+PREP:
+  datafile: proj_efield/PtData_forCDA_edit.csv
+  overwrite_prior: true
+  
+  variables:
+
+    # minimum number of raw rows
+    min_raw_rows: 20
+    
+  steps_global:
+
+    # - 
+    #   op: sort
+    #   arg:
+    #     - datetime
+
+    # -
+    #   op: recode 
+    #   arg: 
+    #     binge: 
+    #       T: 1.0
+    #       F: 0.0
+    #       nan: 0.0
+
+    #     vomit: 
+    #       T: 1.0
+    #       F: 0.0
+    #       nan: 0.0
+    
+    -
+      op: keep
+      arg:
+        #- id
+        - group_f
+        #- group
+        #- subject
+        - bm_bmi
+        - age
+        - gender
+        - Fp1left
+        - Fp1right
+        - F3left
+        - F3right
+        - thickness_CSF_left
+        - thickness_scalp_left
+        - thickness_skull_left
+        - thickness_cortex_left
+        - ScalpToCortex_left
+        - thickness_CSF_right
+        - thickness_scalp_right
+        - thickness_skull_right
+        - thickness_cortex_right
+        - ScalpToCortex_right
+
+    - 
+      op: rename
+      arg: 
+        group_f: group
+    
+    - 
+      op: missing_value
+      arg: drop
+    -
+      op: save
+      arg: 
+        dir: data_clean
+        stub: _all.csv
+
+  # step for individual case
+  steps_case:
+
+    # -
+    #   op: drop
+    #   arg:
+    #     - id
+    #     #- LPAClus
+    #     - datetime
+    #     #- First
+    #     #- CumHrs
+
+    # -
+    #   op: rename
+    #   arg:
+    #     PANASNEG: panasneg
+    #     PANASPOS: panaspos
+
+    # - 
+    #   op: missing_value
+    #   arg: drop
+
+    # -
+    #   op: save
+    #   arg: 
+    #     dir: data_raw
+    #     stub: _raw.csv
+    # -
+    #   op: add_lag
+    #   arg:
+
+    # -
+    #   op: save
+    #   arg: 
+    #     dir: data_raw
+    #     stub: _lagged.csv
+    
+    # -
+    #   op: standardize
+    #   arg:
+    
+    # -
+    #   op: save
+    #   arg: 
+    #     dir: data
+    #     stub: .csv 
+
+# variables:
+
+#   # minimum number of raw rows
+#   min_raw_rows: 60
+
+CAUSAL:
+
+  # rename xxx_out.txt to xxx.txt
+  renametxt: [ _out.txt, .txt]
+
+
+  # set the default jarfile path for causal_cmd
+  cmdpath: /home/limko/public/causal
+  # auto select causal path based on hostname
+  jarautopath:
+    # MSI agate node
+    "acn": /home/limko/public/causal
+    # macbook
+    "XJ75": /Users/kolim/bin
+    # VA
+    "resch4": /home/train/causal-bin
+
+
+  causal-cmd:
+    alpha: 0.05
+    algorithm: gfci
+    dataset: 
+    data-type: continuous
+    delimiter: comma
+    json-graph: False
+    #knowledge: prior.txt
+    out: output_gfci
+    penaltyDiscount: 1.0
+    prefix:
+    score: sem-bic-score
+    #skip-latest: True
+    test: fisher-z-test
+    #thread: 1
+    version: 1.11.1
+
+  causal-cmd_1.8.0:
+    alpha: 0.05
+    algorithm: gfci
+    dataset: 
+    data-type: continuous
+    delimiter: comma
+    json-graph: False
+    knowledge: prior.txt
+    out: output_gfci
+    penaltyDiscount: 1.0
+    prefix:
+    score: sem-bic-score
+    #skip-latest: True
+    test: fisher-z-test
+    #thread: 1
+    version: 1.8.0
+ 
+
+  # 1.1.3
+  causal-cmd_1.1.3:
+    alpha: 0.05
+    algorithm: gfci
+    dataset: 
+    data-type: continuous
+    delimiter: comma
+    json-graph: False
+    knowledge: prior.txt
+    out: output_gfci
+    penaltyDiscount: 1.0
+    prefix:
+    score: sem-bic
+    skip-latest: True
+    test: fisher-z-test
+    thread: 1
+    version: 1.1.3
+    #cmdpath: /home/limko/public/causal
+    cmdpath: /home/train/causal-bin
+
+  # standardize the columns
+  standardize_cols: true
+
+SEM:
+  plotting:
+    plot_all_edges: True   # default is False
+    fontname: Helvetica
+    label_edge_types: [-->, o-> , o-o ]
+    min_pvalue: 1
+    show_pvalue: True
+    label: True
+
+  # type of edges to include in model
+  include_model_edges: [ ['-->','~'], ['o->', '~'] ]
+
+GRAPHS:
+  # additional graphs
+
+  # settings for graphviz
+  - op: graphviz
+    arg:
+      - node, shape=square
+      - node, color=red
+
+  -
+    op: ancestors
+    arg: 
+      nodes: [binge,vomit]
+      colors: 
+        pos: green
+        neg: red
+
+  -
+    op: save_plot
+    arg: 
+      stub: _ancest.png
+      dir: output
+
+
+check:
+  # condition - to not include 'all_cases'
+  condition: "id != 'all_cases'"
+
