@@ -6,7 +6,7 @@ GLOBAL:
   # name of various directories to create
   directories:
     # name of data directory
-    datadir: data_clean
+    datadir: data
     rawdatadir: data_raw
     output: output_gfci
 
@@ -75,11 +75,11 @@ PREP:
     -
       op: save
       arg: 
-        dir: data_clean
+        dir: data
         stub: _all.csv
 
   # step for individual case
-  steps_case:
+  #steps_case:
 
     # -
     #   op: drop
@@ -163,7 +163,7 @@ CAUSAL:
     #skip-latest: True
     test: fisher-z-test
     #thread: 1
-    version: 1.11.1
+    version: 1.8.0
 
   causal-cmd_1.8.0:
     alpha: 0.05
@@ -230,7 +230,7 @@ GRAPHS:
   -
     op: ancestors
     arg: 
-      nodes: [binge,vomit]
+      nodes: [Fp1left,Rp1right,F3left,F3right]
       colors: 
         pos: green
         neg: red
