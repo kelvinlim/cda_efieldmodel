@@ -1,0 +1,211 @@
+GLOBAL:
+  version: 4.0
+  name: efield f3left
+
+
+  # name of various directories to create
+  directories:
+    # name of data directory
+    datadir: data
+    rawdatadir: data_raw
+    output: output_gfci
+
+PREP:
+  datafile: proj_f3right/PtDataF3right_forCDA.csv
+  overwrite_prior: true
+  
+  variables:
+
+    # minimum number of raw rows
+    min_raw_rows: 20
+    
+  steps_global:
+
+    # - 
+    #   op: sort
+    #   arg:
+    #     - datetime
+
+    # -
+    #   op: recode 
+    #   arg: 
+    #     binge: 
+    #       T: 1.0
+    #       F: 0.0
+    #       nan: 0.0
+
+    #     vomit: 
+    #       T: 1.0
+    #       F: 0.0
+    #       nan: 0.0
+    
+    -
+      op: keep
+      arg:
+        - group_f
+        #- group
+        #- subject
+        - bm_bmi
+        - age
+        - gender
+        - F3left
+        - thickness_CSF_leftdlPFC
+        - thickness_scalp_leftdlPFC
+        - thickness_skull_leftdlPFC
+        - thickness_cortex_leftdlPFC
+        - ScalpToCortex_leftdlPFC
+        - thickness_CSF_F3
+        - thickness_scalp_F3
+        - thickness_skull_F3
+        - thickness_cortex_F3
+        - ScalpToCortex_F3
+        - thickness_CSF_Fp2
+        - thickness_scalp_Fp2
+        - thickness_skull_Fp2
+        - thickness_cortex_Fp2
+        - ScalpToCortex_Fp2
+
+    - 
+      op: rename
+      arg: 
+        group_f: group
+    
+    - 
+      op: missing_value
+      arg: drop
+    -
+      op: save
+      arg: 
+        dir: data
+        stub: _all.csv
+
+  # step for individual case
+  #steps_case:
+
+    # -
+    #   op: drop
+    #   arg:
+    #     - id
+    #     #- LPAClus
+    #     - datetime
+    #     #- First
+    #     #- CumHrs
+
+    # -
+    #   op: rename
+    #   arg:
+    #     PANASNEG: panasneg
+    #     PANASPOS: panaspos
+
+    # - 
+    #   op: missing_value
+    #   arg: drop
+
+    # -
+    #   op: save
+    #   arg: 
+    #     dir: data_raw
+    #     stub: _raw.csv
+    # -
+    #   op: add_lag
+    #   arg:
+
+    # -
+    #   op: save
+    #   arg: 
+    #     dir: data_raw
+    #     stub: _lagged.csv
+    
+    # -
+    #   op: standardize
+    #   arg:
+    
+    # -
+    #   op: save
+    #   arg: 
+    #     dir: data
+    #     stub: .csv 
+
+# variables:
+
+#   # minimum number of raw rows
+#   min_raw_rows: 60
+
+CAUSAL:
+
+  # rename xxx_out.txt to xxx.txt
+  renametxt: [ _out.txt, .txt]
+
+
+  # set the default jarfile path for causal_cmd
+  cmdpath: /home/limko/public/causal
+  # auto select causal path based on hostname
+  jarautopath:
+    # MSI agate node
+    "acn": /home/limko/public/causal
+    # macbook
+    "XJ75": /Users/kolim/bin
+    # VA
+    "resch4": /home/train/causal-bin
+
+
+  causal-cmd:
+    alpha: 0.05
+    algorithm: gfci
+    dataset: 
+    data-type: continuous
+    delimiter: comma
+    json-graph: False
+    #knowledge: prior.txt
+    out: output_gfci
+    penaltyDiscount: 1.0
+    prefix:
+    score: sem-bic-score
+    #skip-latest: True
+    test: fisher-z-test
+    #thread: 1
+    version: 1.8.0
+
+  # standardize the columns
+  standardize_cols: true
+
+SEM:
+  plotting:
+    plot_all_edges: True   # default is False
+    fontname: Helvetica
+    label_edge_types: [-->, o-> , o-o ]
+    min_pvalue: 1
+    show_pvalue: True
+    label: True
+
+  # type of edges to include in model
+  include_model_edges: [ ['-->','~'], ['o->', '~'] ]
+
+GRAPHS:
+  # additional graphs
+
+  # settings for graphviz
+  - op: graphviz
+    arg:
+      - node, shape=square
+      - node, color=red
+
+  -
+    op: ancestors
+    arg: 
+      nodes: [F3left]
+      colors: 
+        pos: green
+        neg: red
+
+  -
+    op: save_plot
+    arg: 
+      stub: _ancest.png
+      dir: output
+
+
+check:
+  # condition - to not include 'all_cases'
+  condition: "id != 'all_cases'"
+
