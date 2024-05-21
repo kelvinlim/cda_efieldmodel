@@ -18,6 +18,6 @@ module load graphviz
 
 ```
 run_parse2.py --mdir proj_efield
-run_casual2.py --mdir proj_efield
+run_causal2.py --mdir proj_efield
 
 ```
